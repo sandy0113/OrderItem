@@ -1,0 +1,34 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderitem
+  labels:
+    app: orderitem
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orderitem  
+  template:
+    metadata:
+      labels:
+        app: orderitem
+    spec:
+      containers:
+      - name: orderitem
+        image: mymenuitemapi226cr.azurecr.io/myorderitem:latest
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: myacrcredentails
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orderitemsvc
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: orderitem
